@@ -26,6 +26,16 @@ It has the following strengths:
    - ```pip install git+https://github.com/nmigen/nmigen.git```
  - [nMigen SOC Harry Ho Branch](https://github.com/HarryMakes/nmigen-soc)
    - ```pip3 install git+https://github.com/HarryMakes/nmigen-soc/@wishbone_interconnect```
+ - [GTKWave](http://gtkwave.sourceforge.net)
+ - [OR Scansion](http://www.logicpoet.com/scansion/)
+
+# Usage
+ - ```python3 mem.py```
+ - ```python3 cache_bench.py```
+ - ```python3 sram_wishbone.py```
+ - ```python3 sync_behaviors.py```
 
 # TODO
+ - [ ] Finish cache example
+ - [ ] make print_sig a common utility
  - [ ] remove ```import *```

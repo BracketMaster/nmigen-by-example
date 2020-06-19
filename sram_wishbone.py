@@ -48,6 +48,8 @@ def process():
     yield sram.bus.stb.eq(1)
     yield
 
+    # see sync_behaviors.py
+    # for why we need Settle()
     yield Settle()
     yield from print_sig(sram.bus.adr)
     yield from print_sig(sram.bus.dat_r, "h")

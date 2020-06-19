@@ -1,4 +1,5 @@
-from nmigen import *
+from nmigen import Memory, Signal, Module
+from nmigen import Elaboratable
 
 mem = Memory(width=32, depth=16)
 rp = mem.read_port()

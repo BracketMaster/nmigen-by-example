@@ -1,4 +1,4 @@
-from nmigen import *
+from nmigen import Memory
 from back.cache import L1Cache
 
 # This tutorial aims to capture how to use Minerva's
