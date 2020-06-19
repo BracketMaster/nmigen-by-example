@@ -37,5 +37,6 @@ It has the following strengths:
 
 # TODO
  - [ ] Finish cache example
- - [ ] make print_sig a common utility
- - [ ] remove ```import *```
+ - [ ] make [print_sig](https://github.com/BracketMaster/nmigen-by-example/blob/master/sram_wishbone.py#L24)
+ a common utility
+ - [x] remove ```import *```
