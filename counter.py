@@ -1,13 +1,14 @@
-# still largely experimental
-# from nmigen.sim.cxxsim import Simulator
-
+"""
+Simple counter in nMigen.
+Write simulations results to a
+vcd file.
+"""
 from nmigen import Signal, Elaboratable, Module
-from nmigen.back.pysim import Simulator
+from nmigen.sim.pysim import Simulator
 
 class Top(Elaboratable):
     def __init__(self):
         self.counter = Signal(range(10))
-        self.other = Signal()
 
     def elaborate(self, platform):
         m = Module()
@@ -25,4 +26,6 @@ if __name__ == '__main__':
     sim = Simulator(dut)
     sim.add_clock(1e-6)
     sim.add_sync_process(process)
-    sim.run()
+
+    with sim.write_vcd(f"{__file__[:-3]}.vcd"):
+        sim.run()

@@ -1,7 +1,14 @@
+"""
+this tutorial tries to capture some subtleties
+you might encounter when peeking at synchronous
+logic.
+
+These arrive from nMigen's use of Settle which
+will likely be improved in future nMigen versions.
+
+https://freenode.irclog.whitequark.org/nmigen/2020-08-27#27806940;
+"""
 from nmigen import *
-# this tutorial tries to capture some subtleties
-# you might encounter when peeking at synchronous
-# logic
 
 class Simple(Elaboratable):
     def __init__(self):

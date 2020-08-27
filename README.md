@@ -22,6 +22,13 @@ It has the following strengths:
 
 # Dependencies
 
+You can install the dependencies below
+easily with:
+
+```
+pip3 install -r requirements.txt
+```
+
  - [nMigen](https://github.com/nmigen/nmigen)
    - ```pip install git+https://github.com/nmigen/nmigen.git```
  - [nMigen SOC Harry Ho Branch](https://github.com/HarryMakes/nmigen-soc)

@@ -1,0 +1,2 @@
+-e git+https://github.com/nmigen/nmigen.git#egg=nmigen
+-e git+https://github.com/HarryMakes/nmigen-soc@wishbone_interconnect#egg=nmigen_soc
