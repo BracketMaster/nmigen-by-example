@@ -3,14 +3,14 @@ from nmigen import DomainRenamer, ClockDomain
 from nmigen.lib.fifo import AsyncFIFOBuffered
 
 class Producer(Elaboratable):
-    def __init__(self, w_rdy_i, w_en_o, w_data_o):
+    def __init__(self, data_shape):
 
         # inputs
-        self.w_rdy_i = w_rdy_i
+        self.w_rdy_i = Signal()
 
         # outputs
-        self.w_en_o = w_en_o
-        self.w_data_o = w_data_o
+        self.w_en_o = Signal()
+        self.w_data_o = Signal(data_shape)
 
     def elaborate(self, platform):
         m = Module()
@@ -27,15 +27,15 @@ class Producer(Elaboratable):
         return m
 
 class Consumer(Elaboratable):
-    def __init__(self, r_rdy_i, r_data_i, r_en_o):
+    def __init__(self, data_shape):
 
         # inputs
-        self.r_rdy_i = r_rdy_i
-        self.r_data_i = r_data_i
+        self.r_rdy_i = Signal()
+        self.r_data_i = Signal(data_shape)
 
         # outputs
-        self.r_en_o = r_en_o
-        self.data = Signal(4)
+        self.r_en_o = Signal()
+        self.data = Signal(data_shape)
 
     def elaborate(self, platform):
         m = Module()
@@ -53,6 +53,16 @@ class Consumer(Elaboratable):
 
 
 class Top(Elaboratable):
+    def __init__(self, data_width):
+        # instantiate submodules
+        self.producer = DomainRenamer("producer")\
+            (Producer(data_width))
+        self.consumer = DomainRenamer("consumer")\
+            (Consumer(data_width))
+        self.fifo = AsyncFIFOBuffered(width=data_width,
+            depth=data_width, w_domain="producer", 
+            r_domain="consumer")
+
     def elaborate(self, platform):
         m = Module()
 
@@ -60,33 +70,29 @@ class Top(Elaboratable):
         m.domains.producer = ClockDomain()
         m.domains.consumer = ClockDomain()
 
-        # create FIFO shared between producer and consumer
-        m.submodules.fifo = fifo = AsyncFIFOBuffered(
-            width=4, depth=4, w_domain="producer", r_domain="consumer"
-            )
+        # attach submodules
+        m.submodules.producer = producer = self.producer
+        m.submodules.consumer = consumer = self.consumer
+        m.submodules.fifo = fifo = self.fifo
 
-        # create producer
-        self.producer = m.submodules.producer = DomainRenamer("producer")(
-            Producer(
-                w_rdy_i = fifo.w_rdy, w_en_o = fifo.w_en, w_data_o= fifo.w_data
-                )
-            )
+        # producer <> fifo
+        m.d.comb += producer.w_rdy_i.eq(fifo.w_rdy)
+        m.d.comb += fifo.w_en.eq(producer.w_en_o)
+        m.d.comb += fifo.w_data.eq(producer.w_data_o)
 
-        # create consumer 
-        self.consumer = m.submodules.consumer = DomainRenamer("consumer")(
-            Consumer(
-                r_rdy_i = fifo.r_rdy, r_data_i = fifo.r_data, r_en_o = fifo.r_en
-                )
-            )
+        # consumer <> fifo
+        m.d.comb += consumer.r_rdy_i.eq(fifo.r_rdy)
+        m.d.comb += consumer.r_data_i.eq(fifo.r_data)
+        m.d.comb += fifo.r_en.eq(consumer.r_en_o)
         
         return m
 
 if __name__ == "__main__":
     from nmigen.back.pysim import Simulator, Tick
     
-    top = Top()
+    top = Top(data_width=4)
     sim = Simulator(top)
-    sim.add_clock(1e-6, domain="producer")
+    sim.add_clock(3e-6, domain="producer")
     sim.add_clock(5e-6, domain="consumer")
 
     
@@ -100,5 +106,6 @@ if __name__ == "__main__":
                 print(f"consumer.data = {yield top.consumer.data}")
                 yield Tick(domain="consumer")
 
-        sim.add_sync_process(process, domain="consumer")
+        # change to add process
+        sim.add_process(process)
         sim.run()
