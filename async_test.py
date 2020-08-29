@@ -1,3 +1,8 @@
+"""
+This file is an example of how to communicate
+between a producer and consumer in two different
+clock domains using nMigen's asynchronous Fifo.
+"""
 from nmigen import Signal, Elaboratable, Module
 from nmigen import DomainRenamer, ClockDomain
 from nmigen.lib.fifo import AsyncFIFOBuffered

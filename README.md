@@ -37,10 +37,13 @@ pip3 install -r requirements.txt
  - [OR Scansion](http://www.logicpoet.com/scansion/)
 
 # Usage
- - ```python3 mem.py```
- - ```python3 cache_bench.py```
- - ```python3 sram_wishbone.py```
- - ```python3 sync_behaviors.py```
+ - ``python3 mem.py`` - example on how to use nMigen SRAM
+ - ``python3 sram_wishbone.py`` - using nMigen SRAM with
+  wishbone 
+ - ``python3 sync_behaviors.py`` - documenting some subtle
+  nMigen Settle() behaviors
+ - ``python3 async_test.py`` - communication between clock
+  domains with asynchronous Fifo
 
 # TODO
  - [ ] Finish cache example
