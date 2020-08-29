@@ -44,10 +44,10 @@ class Consumer(Elaboratable):
 
         with m.If(self.r_rdy_i):
             m.d.comb += self.r_en_o.eq(1)
-            m.d.sync += data.eq(self.r_data_i)
+            m.d.comb += data.eq(self.r_data_i)
         with m.Else():
             m.d.comb += self.r_en_o.eq(0)
-            m.d.sync += data.eq(0)
+            m.d.comb += data.eq(0)
         
         return m
 
